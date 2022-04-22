@@ -9,7 +9,6 @@
 import pandas as pd
 from array import array
 import time
-start = time.time()
 import os
 from datetime import date
 import numpy as np
@@ -50,7 +49,7 @@ st.markdown("We are a drug discovery team with an interest in the development of
 #---------------------------------#
 
 st.write("""
-# LIDeB Tools - SOMoC v1.0
+# LIDeB Tools - SOMoC (beta)
  SOMoC is a clustering methodology based on the combination of molecular fingerprinting, dimensionality reduction by the Uniform Manifold Approximation and Projection (UMAP) algorithm and clustering with the Gaussian Mixture Model (GMM) algorithm.
 The next workflow summarizes the steps performed by SOMoC:
 """)
@@ -133,7 +132,7 @@ def Get_name(archive: str):
 
 def Get_input_data():
     """Get data from user input or use test dataset"""
-  
+
     if input_file is not None:
         name = input_file.name
         #data1 = pd.read_csv(input_file, delimiter=',', header=0)
@@ -142,9 +141,18 @@ def Get_input_data():
             list_of_smiles = data["SMILES"]
         else:
             list_of_smiles = data.iloc[:, 0]
+          
+        #st.write(data1)
+       # if "SMILES" in list(data1.columns):
+        #    data1.columns = range(data1.shape[1])
+        #    data= data1.copy()
+        #else:
+         #   data = pd.read_csv(input_file, delimiter=',')
+          #  st.write(data)
+      
     else:
         name = Get_name("test/focal_adhesion.csv")
-        data = pd.read_csv("test/focal_adhesion.csv", delimiter=',' , index_col=None)
+        data = pd.read_csv("test/focal_adhesion.csv", delimiter=',', header=None)
     return data, name
 
 def Download_CSV(df, name:str, filetype:str):
@@ -212,8 +220,6 @@ def Fingerprints_calculator(data):
         EState = np.stack(_EState, axis=0)
     except:
         st.error("**Oh no! There was a problem with Fingerprint calculation of some smiles.**  :confused:")
-        st.markdown(" :point_down: **Try using our standarization tool before clustering **")
-        st.write("[LIDeB Standarization tool](https://share.streamlit.io/capigol/lbb-game/main/juego_lbb.py)")
         st.stop()
 
     st.write("Calculating EState molecular fingerprints...")
@@ -430,12 +436,7 @@ def Setting_info():
     settings.append(["n_init:", str(n_init)])
     settings.append(["init_params",str(init_params)])
     settings.append(["covariance_type",str(covariance_type)])       
-    settings.append(["",""])
-    end = time.time()
-    hours, rem = divmod(end-start, 3600)
-    minutes, seconds = divmod(rem, 60)
-    settings.append(["{:0>2}:{:0>2}:{:05.2f}".format(int(hours),int(minutes),seconds)])   
-
+    settings.append(["",""])           
     settings_df = pd.DataFrame(settings)
     
     return settings_df
