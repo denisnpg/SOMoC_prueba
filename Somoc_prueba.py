@@ -136,7 +136,7 @@ def Get_input_data():
     if input_file is not None:
         name = input_file.name
         #data1 = pd.read_csv(input_file, delimiter=',', header=None)
-        data = pd.read_csv(input_file)
+        data = pd.read_csv(input_file, header=None)
         if "SMILES" in data:
             list_of_smiles = data["SMILES"]
         else:
